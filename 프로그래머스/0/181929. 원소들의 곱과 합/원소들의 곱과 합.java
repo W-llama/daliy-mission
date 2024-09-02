@@ -9,12 +9,8 @@ class Solution {
             summul += num_list[i];
         }
         
-        int summul2 = (int)Math.pow(summul , 2);
+        answer = Math.pow(summul,2) > nummul ? 1 : 0;
         
-        if(nummul < summul2){
-            return answer = 1;
-        }else{
-            return answer = 0;
-        }
+        return answer;
     }
 }
