@@ -1,25 +1,16 @@
-import java.util.*;
+import java.util.ArrayList;
 
 class Solution {
     public int[] solution(int l, int r) {
-        List<Integer> list = new ArrayList<>();
-        
-        String regx = "^[^12346789]*$";
-        
-        for (int i = l; i <= r; i++) {
-            if (String.valueOf(i).matches(regx)) {
-                list.add(i);
-            }
+
+        ArrayList<Integer> list = new ArrayList<>();
+
+        for (int i = 1; i < 64; i++) {
+            int num = Integer.parseInt(Integer.toBinaryString(i)) * 5;
+            if (l <= num && num <= r)
+                list.add(num);
         }
 
-        if (list.size() > 0) {
-            int[] result = new int[list.size()];
-            for (int i = 0; i < list.size(); i++) {
-                result[i] = list.get(i);
-            }
-            return result;
-        }
-
-        return new int[]{-1};
+        return list.isEmpty() ? new int[] { -1 } : list.stream().mapToInt(i -> i).toArray();
     }
 }
