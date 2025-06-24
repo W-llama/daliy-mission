@@ -20,11 +20,7 @@ public class Main {
         st = new StringTokenizer(br.readLine());
         for(int i = 0; i < M; i++) {
             int input = Integer.parseInt(st.nextToken());
-            if(hash.get(input) == null) {
-                sb.append(0).append(" ");
-            } else {
-                sb.append(hash.get(input)).append(" ");
-            }
+            sb.append(hash.getOrDefault(input, 0)).append(" ");
         }
         System.out.println(sb);
     }
