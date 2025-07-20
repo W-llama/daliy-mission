@@ -4,112 +4,49 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-	static int checkArr[];
-	static int myArr[];
-	static int checkSecret;
-	
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		
-		// 입력
-		int S = Integer.parseInt(st.nextToken());
-		int P = Integer.parseInt(st.nextToken());
-		
-		int result = 0;
-		char [] arr = new char[S];
-		checkArr = new int [4];
-		myArr = new int [4];
-		checkSecret = 0;
-		
-		arr = br.readLine().toCharArray();
-		st = new StringTokenizer(br.readLine());
-		
-		for(int i = 0; i < 4; i++){
-			checkArr[i] = Integer.parseInt(st.nextToken());
-			if(checkArr[i] == 0){
-				checkSecret++;
-			}
-		}
-		
-		for(int i = 0; i < P; i++){
-			Add(arr[i]);
-		}
-		if(checkSecret==4){
-			result++;
-		}
-		
-		for(int i=P; i < S; i++){
-			int j = i - P;
-			Add(arr[i]);
-			Remove(arr[j]);
-			if(checkSecret==4) {
-				result++;
-			}
-		}
-		System.out.println(result);
-	}
-	
-	private static void Add(char c){
-		switch (c){
-			case 'A':
-				myArr[0]++;
-				if(myArr[0]==checkArr[0]){
-					checkSecret++;
-				}
-				break;
-			case 'C':
-				myArr[1]++;
-				if(myArr[1]==checkArr[1]){
-					checkSecret++;
-				}
-				break;
-			case 'G':
-				myArr[2]++;
-				if(myArr[2]==checkArr[2]){
-					checkSecret++;
-				}
-				break;
-			case 'T':
-				myArr[3]++;
-				if(myArr[3]==checkArr[3]){
-					checkSecret++;
-				}
-				break;
-			default:
-				break;
-				
-		}
-	}
-	
-	private static void  Remove(char c){
-		switch (c){
-			case 'A':
-				myArr[0]--;
-				if(myArr[0]==checkArr[0]-1){
-					checkSecret--;
-				}
-				break;
-			case  'C':
-				myArr[1]--;
-				if(myArr[1]==checkArr[1]-1){
-					checkSecret--;
-				}
-				break;
-			case  'G':
-				myArr[2]--;
-				if(myArr[2]==checkArr[2]-1){
-					checkSecret--;
-				}
-				break;
-			case  'T':
-				myArr[3]--;
-				if(myArr[3]==checkArr[3]-1){
-					checkSecret--;
-				}
-				break;
-			default:
-				break;
-		}
-	}
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        
+        int S = Integer.parseInt(st.nextToken());
+        int P = Integer.parseInt(st.nextToken());
+        
+        String dna = br.readLine();
+        st = new StringTokenizer(br.readLine());
+        
+        int[] need = new int[4]; // A, C, G, T 필요 개수
+        int[] count = new int[4]; // 현재 윈도우의 개수
+        
+        for(int i = 0; i < 4; i++) {
+            need[i] = Integer.parseInt(st.nextToken());
+        }
+        
+        int result = 0;
+        
+        // 첫 번째 윈도우
+        for(int i = 0; i < P; i++) {
+            count[getIndex(dna.charAt(i))]++;
+        }
+        if(isValid(count, need)) result++;
+        
+        // 슬라이딩 윈도우
+        for(int i = P; i < S; i++) {
+            count[getIndex(dna.charAt(i))]++; // 새로운 문자 추가
+            count[getIndex(dna.charAt(i-P))]--; // 이전 문자 제거
+            if(isValid(count, need)) result++;
+        }
+        
+        System.out.println(result);
+    }
+    
+    static int getIndex(char c) {
+        return c == 'A' ? 0 : c == 'C' ? 1 : c == 'G' ? 2 : 3;
+    }
+    
+    static boolean isValid(int[] count, int[] need) {
+        for(int i = 0; i < 4; i++) {
+            if(count[i] < need[i]) return false;
+        }
+        return true;
+    }
 }
